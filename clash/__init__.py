@@ -6,9 +6,18 @@ from sql import db
 
 
 ALLOW_PROXY_GROUP = ["手动选择", "全球直连", "规则之外"]
-PROXY_2GROUP = ["规则之外"]
+ALLOW_PROXY = ALLOW_PROXY_GROUP + ["DIRECT", "节点选择", "漏网之鱼"]
+PROXY_2GROUP = ["全球直连", "漏网之鱼", "规则之外"]
 METHODS = ['DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'IP-CIDR', 'IP-CIDR6', 'DOMAIN', 'GEOIP', 'MATCH']
 DIRECT_OLD_RULE = ["DIRECT", "国内媒体", "哔哩哔哩", "网易云音乐", "微软云盘", "苹果服务", "谷歌FCM"]
+
+
+def change_proxy_group_name(name: str):
+    if name == "漏网之鱼":
+        return "规则之外"
+    if name == "节点选择":
+        return "手动选择"
+    return name
 
 
 def clean_base(base: dict):
@@ -19,12 +28,13 @@ def clean_base(base: dict):
 
     new_proxies = []
     for i in base["proxy-groups"]:
-        i["name"] = chinese_string(i["name"])
+        i["name"] = change_proxy_group_name(chinese_string(i["name"]))
+
         i["proxies"] = [chinese_string(a) for a in i["proxies"]]
 
         if i["name"] in ALLOW_PROXY_GROUP:
             if i["name"] in PROXY_2GROUP:  # 过滤 proxies
-                i["proxies"] = [n for n in i["proxies"] if n in ALLOW_PROXY_GROUP]
+                i["proxies"] = [change_proxy_group_name(n) for n in i["proxies"] if n in ALLOW_PROXY]
             new_proxies.append(i)
 
     base["proxy-groups"] = new_proxies
@@ -90,7 +100,7 @@ def get_rule_file(base_file: str = "base.yaml", output_file: str = "output.yaml"
         yaml.dump(base, f)
 
 
-def download_base_file(base_file: str = "base.yaml"):
-    response = requests.get(url=conf["BASE_URL"], headers={"User-Agent": conf["UA"]})
+def download_base_file(base_url: str, base_file: str = "base.yaml"):
+    response = requests.get(url=base_url, headers={"User-Agent": conf["UA"]})
     with open(base_file, mode="wb") as f:
         f.write(response.content)

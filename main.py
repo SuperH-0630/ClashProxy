@@ -21,15 +21,17 @@ from clash import download_base_file, get_rule_file
 
 
 def start():
-    try:
-        download_base_file(f"{conf['BASE_FILE_NAME']}.yaml")
-    except requests.exceptions.RequestException:
-        pass
+    for i in conf["BASE_URL"]:
+        try:
+            download_base_file(i, base_file=f"{conf['BASE_FILE_NAME']}.yaml")
+        except requests.exceptions.RequestException:
+            pass
 
-    try:
-        get_rule_file(f"{conf['BASE_FILE_NAME']}.yaml", f"{conf['OUTPUT_FILE_NAME']}.yaml")
-    except FileNotFoundError:
-        pass
+        try:
+            get_rule_file(base_file=f"{conf['BASE_FILE_NAME']}.yaml",
+                          output_file=f"{conf['OUTPUT_FILE_NAME']}.yaml")
+        except FileNotFoundError:
+            pass
 
 
 app = ClashFlask(__name__)
@@ -50,9 +52,9 @@ class TimerRefresh(threading.Timer):
         self.daemon = True  # 设置为守护进程
 
 
-FirstRefresh().start()
-TimerRefresh().start()
-
-
 if __name__ == '__main__':
     start()
+else:
+    # 作为Flask启动
+    FirstRefresh().start()
+    TimerRefresh().start()

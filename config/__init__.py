@@ -14,7 +14,7 @@ conf: Dict[str, any] = {
     "WEBSITE_NAME": "ClashProxy",
     "WEBSITE_TITLE": "Clash-Proxy-神秘网站",
 
-    "BASE_URL": "",
+    "BASE_URL": [],
     "DOWNLOAD_URL": "123456789",
     "UA": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) "
           "Chrome/106.0.0.0 Mobile Safari/537.36",
