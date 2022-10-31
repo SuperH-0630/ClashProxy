@@ -3,6 +3,7 @@ from flask_login import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired
+import requests.exceptions
 
 from .logger import Logger
 from config import conf
@@ -60,7 +61,7 @@ def remote_refresh_page():
     try:
         download_base_file(f"{conf['BASE_FILE_NAME']}.yaml")
         get_rule_file(f"{conf['BASE_FILE_NAME']}.yaml", f"{conf['OUTPUT_FILE_NAME']}.yaml")
-    except FileNotFoundError:
+    except (FileNotFoundError, requests.exceptions.RequestException):
         return abort(404)
     flash("远程刷新成功")
     return redirect(url_for("base.index_page"))
