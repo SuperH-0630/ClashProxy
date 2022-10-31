@@ -16,6 +16,14 @@
                 {{ form.submit(class='btn btn-success me-2') }}
             </div>
         </form>
+
+        <div class="text-center mt-5">
+            <div class="btn-group">
+                <a class="btn btn-danger" href="{{ url_for("base.remote_refresh_page") }}"> 远程刷新 </a>
+                <a class="btn btn-primary" href="{{ url_for("base.refresh_page") }}"> 本地刷新 </a>
+                <a class="btn btn-success" href="{{ url_for("base.download_page") }}"> 下载配置 </a>
+            </div>
+        </div>
     </div>
 
 </div>

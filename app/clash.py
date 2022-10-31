@@ -9,4 +9,8 @@ clash = Blueprint("clash", __name__)
 def download_page(c: str):
     if c != conf["DOWNLOAD_URL"]:
         return abort(404)
-    return send_file(f"{conf['OUTPUT_FILE_NAME']}.yaml")
+
+    try:
+        return send_file(f"{conf['OUTPUT_FILE_NAME']}.yaml")
+    except FileNotFoundError:
+        return abort(404)
