@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, abort
+from flask import Blueprint, render_template, flash, redirect, url_for, abort, request
 from flask_login import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired
 import requests.exceptions
+from urllib.parse import urljoin
 
 from .logger import Logger
 from config import conf
@@ -31,8 +32,11 @@ def __load_index_page(form:AddRuleForm = None):
     if not form:
         form = AddRuleForm()
 
+
     Logger.print_load_page_log("index")
-    return render_template("index/index.html", form=form)
+    return render_template("index/index.html",
+                           form=form,
+                           url=urljoin(request.host_url, url_for("clash.download_page", c=f"KEY")))
 
 
 @index.route("/")
