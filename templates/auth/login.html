@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %} 登录 {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" action="{{ url_for("auth.login_page") }}" class="was-validated">
+            {{ form.hidden_tag() }}
+            {{ render_field(form.username) }}
+            {{ render_field(form.passwd) }}
+
+            <div class="text-end">
+                {{ form.submit(class='btn btn-success me-2') }}
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} 首页 {% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <h3> 欢迎访问小站 ! </h3>
+
+    <div class="container text-start">
+        <form method="post" action="{{ url_for("base.add_rule_page") }}" class="was-validated">
+            {{ form.hidden_tag() }}
+            {{ render_select_field(form.method) }}
+            {{ render_field(form.address) }}
+            {{ render_bool_field(form.no_resolve) }}
+
+            <div class="text-end">
+                {{ form.submit(class='btn btn-success me-2') }}
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
