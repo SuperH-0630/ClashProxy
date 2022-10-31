@@ -4,8 +4,6 @@ import os
 from typing import Dict
 import time
 
-
-
 conf: Dict[str, any] = {
     "DEBUG_PROFILE": False,
     "SECRET_KEY": "HProxy-R-Salt",
@@ -18,6 +16,8 @@ conf: Dict[str, any] = {
     "DOWNLOAD_URL": "123456789",
     "UA": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) "
           "Chrome/106.0.0.0 Mobile Safari/537.36",
+    "DNS_URL": 0,
+    "PROXY_URL": 1,
 
     "BASE_FILE_NAME": "base",
     "OUTPUT_FILE_NAME": "output",
@@ -41,7 +41,6 @@ conf: Dict[str, any] = {
     "LOGO": "logo.ico",
     "ICP": {}
 }
-
 
 
 def configure(conf_file: str, encoding="utf-8"):

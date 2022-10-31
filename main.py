@@ -21,14 +21,20 @@ from clash import download_base_file, get_rule_file
 
 
 def start():
-    for i in conf["BASE_URL"]:
+    url = conf["BASE_URL"]
+    save_dns = conf["DNS_URL"]
+    save_proxy = conf["PROXY_URL"]
+
+    for i in range(len(url)):
         try:
-            download_base_file(i, base_file=f"{conf['BASE_FILE_NAME']}.yaml")
+            download_base_file(url[i], base_file=f"{conf['BASE_FILE_NAME']}.yaml")
         except requests.exceptions.RequestException:
             pass
 
         try:
-            get_rule_file(base_file=f"{conf['BASE_FILE_NAME']}.yaml",
+            get_rule_file(save_dns=(save_dns == i),
+                          save_proxy=(save_proxy == i),
+                          base_file=f"{conf['BASE_FILE_NAME']}.yaml",
                           output_file=f"{conf['OUTPUT_FILE_NAME']}.yaml")
         except FileNotFoundError:
             pass
