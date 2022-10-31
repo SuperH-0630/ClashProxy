@@ -9,6 +9,7 @@ import time
 conf: Dict[str, any] = {
     "DEBUG_PROFILE": False,
     "SECRET_KEY": "HProxy-R-Salt",
+    "REFRESH_INTERVAL": 86400,  # 24h刷新一次
 
     "WEBSITE_NAME": "ClashProxy",
     "WEBSITE_TITLE": "Clash-Proxy-神秘网站",
