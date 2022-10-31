@@ -11,6 +11,7 @@ def download_page(c: str):
         return abort(404)
 
     try:
-        return send_file(f"{conf['OUTPUT_FILE_NAME']}.yaml")
+        return send_file(f"{conf['OUTPUT_FILE_NAME']}.yaml",
+                         download_name=f"{conf['DOWNLOAD_FILE_NAME']}.yaml")
     except FileNotFoundError:
         return abort(404)

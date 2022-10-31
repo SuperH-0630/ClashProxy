@@ -21,6 +21,7 @@ conf: Dict[str, any] = {
 
     "BASE_FILE_NAME": "base",
     "OUTPUT_FILE_NAME": "output",
+    "DOWNLOAD_FILE_NAME": "ClashProxy",
 
     "MYSQL_URL": "localhost",
     "MYSQL_NAME": "localhost",
