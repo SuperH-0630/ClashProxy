@@ -113,7 +113,8 @@ def get_rule_file(save_dns: bool,
     with open(base_file, mode="r", encoding="utf-8") as f:
         base: dict = yaml.load(f, yaml.Loader)
 
-    if save_dns or save_rule or output_file is not None:
+    if save_dns or save_proxy or save_rule or output_file is not None:
+        print(base_file)
         clean_base(base, save_dns, save_proxy)
 
     if save_rule:
