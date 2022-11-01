@@ -65,11 +65,12 @@ def add_rule_to_sql(base: dict):
                 add_direct_rule_to_sql(m, *d)
 
 
-def add_direct_rule_to_sql(method, address, _, no_resolve=False):
+def add_direct_rule_to_sql(method, address: str, _, no_resolve=False):
+    address = address.strip()
     no_resolve = no_resolve == "no-resolve"
     method_num = METHODS.index(method)
     res = db.search(r"SELECT id FROM chinese WHERE methods = %s AND address = %s", method_num, address)
-    if res is not None and res.rowcount != 0:
+    if res is not None and res.rowcount > 0:
         return False
 
     db.insert("INSERT INTO chinese(methods, address, no_resolve) VALUES(%s, %s, %s)",
@@ -104,16 +105,25 @@ def chinese_string(text: str):
     return text.strip()
 
 
-def get_rule_file(save_dns: bool, save_proxy: bool, base_file: str = "base.yaml", output_file: str = "output.yaml"):
+def get_rule_file(save_dns: bool,
+                  save_proxy: bool,
+                  save_rule: bool,
+                  base_file: str = "base.yaml",
+                  output_file: str | None = "output.yaml"):
     with open(base_file, mode="r", encoding="utf-8") as f:
         base: dict = yaml.load(f, yaml.Loader)
 
-    clean_base(base, save_dns, save_proxy)
-    add_rule_to_sql(base)
-    get_rule_from_sql(base)
+    if save_dns or save_rule or output_file is not None:
+        clean_base(base, save_dns, save_proxy)
 
-    with open(output_file, mode="w", encoding="utf-8") as f:
-        yaml.dump(base, f)
+    if save_rule:
+        add_rule_to_sql(base)
+
+    if output_file is not None:
+        get_rule_from_sql(base)
+
+        with open(output_file, mode="w", encoding="utf-8") as f:
+            yaml.dump(base, f)
 
 
 def download_base_file(base_url: str, base_file: str = "base.yaml"):

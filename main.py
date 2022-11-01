@@ -24,6 +24,7 @@ def start():
     url = conf["BASE_URL"]
     save_dns = conf["DNS_URL"]
     save_proxy = conf["PROXY_URL"]
+    save_rule = conf["RULE_URL"]
 
     for i in range(len(url)):
         try:
@@ -34,8 +35,9 @@ def start():
         try:
             get_rule_file(save_dns=(save_dns == i),
                           save_proxy=(save_proxy == i),
+                          save_rule=(i in save_rule),
                           base_file=f"{conf['BASE_FILE_NAME']}.yaml",
-                          output_file=f"{conf['OUTPUT_FILE_NAME']}.yaml")
+                          output_file=(f"{conf['OUTPUT_FILE_NAME']}.yaml" if i == len(url) - 1 else None))
         except FileNotFoundError:
             pass
 

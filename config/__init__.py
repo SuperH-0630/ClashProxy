@@ -18,6 +18,7 @@ conf: Dict[str, any] = {
           "Chrome/106.0.0.0 Mobile Safari/537.36",
     "DNS_URL": 0,
     "PROXY_URL": 1,
+    "RULE_URL": [],
 
     "BASE_FILE_NAME": "base",
     "OUTPUT_FILE_NAME": "output",
