@@ -141,5 +141,5 @@ cython_debug/
 
 etc/
 log/
-base.yaml
+base*.yaml
 output.yaml

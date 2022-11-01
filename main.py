@@ -17,29 +17,7 @@ else:
 
 
 from app import ClashFlask
-from clash import download_base_file, get_rule_file
-
-
-def start():
-    url = conf["BASE_URL"]
-    save_dns = conf["DNS_URL"]
-    save_proxy = conf["PROXY_URL"]
-    save_rule = conf["RULE_URL"]
-
-    for i in range(len(url)):
-        try:
-            download_base_file(url[i], base_file=f"{conf['BASE_FILE_NAME']}.yaml")
-        except requests.exceptions.RequestException:
-            pass
-
-        try:
-            get_rule_file(save_dns=(save_dns == i),
-                          save_proxy=(save_proxy == i),
-                          save_rule=(i in save_rule),
-                          base_file=f"{conf['BASE_FILE_NAME']}.yaml",
-                          output_file=(f"{conf['OUTPUT_FILE_NAME']}.yaml" if i == len(url) - 1 else None))
-        except FileNotFoundError:
-            pass
+from clash import make_output_file
 
 
 app = ClashFlask(__name__)
@@ -51,17 +29,17 @@ class FirstRefresh(threading.Thread):
         self.daemon = True  # 设置为守护进程
 
     def run(self):
-        start()
+        make_output_file()
 
 
 class TimerRefresh(threading.Timer):
     def __init__(self):
-        super(TimerRefresh, self).__init__(conf["REFRESH_INTERVAL"], start)
+        super(TimerRefresh, self).__init__(conf["REFRESH_INTERVAL"], make_output_file)
         self.daemon = True  # 设置为守护进程
 
 
 if __name__ == '__main__':
-    start()
+    make_output_file()
 else:
     # 作为Flask启动
     FirstRefresh().start()

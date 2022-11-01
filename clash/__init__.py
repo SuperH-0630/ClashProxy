@@ -130,3 +130,26 @@ def download_base_file(base_url: str, base_file: str = "base.yaml"):
     response = requests.get(url=base_url, headers={"User-Agent": conf["UA"]})
     with open(base_file, mode="wb") as f:
         f.write(response.content)
+
+
+def make_output_file(download: bool = True):
+    url = conf["BASE_URL"]
+    save_dns = conf["DNS_URL"]
+    save_proxy = conf["PROXY_URL"]
+    save_rule = conf["RULE_URL"]
+
+    for i in range(len(url)):
+        if download:
+            try:
+                download_base_file(url[i], base_file=f"{conf['BASE_FILE_NAME']}{i}.yaml")
+            except requests.exceptions.RequestException:
+                pass
+
+        try:
+            get_rule_file(save_dns=(save_dns == i),
+                          save_proxy=(save_proxy == i),
+                          save_rule=(i in save_rule),
+                          base_file=f"{conf['BASE_FILE_NAME']}{i}.yaml",
+                          output_file=(f"{conf['OUTPUT_FILE_NAME']}.yaml" if i == len(url) - 1 else None))
+        except FileNotFoundError:
+            pass

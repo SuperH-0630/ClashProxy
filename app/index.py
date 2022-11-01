@@ -3,12 +3,11 @@ from flask_login import login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired
-import requests.exceptions
 from urllib.parse import urljoin
 
 from .logger import Logger
 from config import conf
-from clash import METHODS, add_direct_rule_to_sql, get_rule_file, download_base_file
+from clash import METHODS, add_direct_rule_to_sql, make_output_file
 
 
 index = Blueprint("base", __name__)
@@ -62,11 +61,7 @@ def add_rule_page():
 @index.route("/remote-refresh-yaml", methods=["GET"])
 @login_required
 def remote_refresh_page():
-    try:
-        download_base_file(f"{conf['BASE_FILE_NAME']}.yaml")
-        get_rule_file(f"{conf['BASE_FILE_NAME']}.yaml", f"{conf['OUTPUT_FILE_NAME']}.yaml")
-    except (FileNotFoundError, requests.exceptions.RequestException):
-        return abort(404)
+    make_output_file()
     flash("远程刷新成功")
     return redirect(url_for("base.index_page"))
 
@@ -74,10 +69,7 @@ def remote_refresh_page():
 @index.route("/refresh-yaml", methods=["GET"])
 @login_required
 def refresh_page():
-    try:
-        get_rule_file(f"{conf['BASE_FILE_NAME']}.yaml", f"{conf['OUTPUT_FILE_NAME']}.yaml")
-    except FileNotFoundError:
-        return abort(404)
+    make_output_file(download=False)
     flash("本地刷新成功")
     return redirect(url_for("base.index_page"))
 
